@@ -27,4 +27,7 @@ public class Usuario {
 
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @Column(name = "role")
+    private String role;
 }

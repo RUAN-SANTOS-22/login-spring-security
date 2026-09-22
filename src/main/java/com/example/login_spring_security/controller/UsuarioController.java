@@ -32,11 +32,13 @@ public class UsuarioController {
     private JwtService jwtService;
 
     @PostMapping("/encodedPassword")
-    public void saveUserWithEncodedPassword(@RequestParam String username, @RequestParam String password) {
+    public void saveUserWithEncodedPassword(@RequestParam String username, @RequestParam String password, @RequestParam String role) {
         Usuario usuario = new Usuario();
         usuario.setUsername(username);
         usuario.setPassword(passwordEncoder.encode(password));
         usuario.setIsActive(true);
+        usuario.setRole(role);
+
         usuarioRepository.save(usuario);
     }
 
@@ -51,9 +53,15 @@ public class UsuarioController {
         );
 
         if (authenticate.isAuthenticated()) {
-            return jwtService.generateToken(authRequest.getUsername());
+            String role = authenticate
+                .getAuthorities()
+                .iterator()
+                .next()
+                .getAuthority()
+                .replace("ROLE_", "");
+            return jwtService.generateToken(authRequest.getUsername(), role);
         }
 
-        return "Falha na autenticação";
+        return null;
     }
 }

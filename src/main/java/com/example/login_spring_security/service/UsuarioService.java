@@ -3,6 +3,7 @@ package com.example.login_spring_security.service;
 import com.example.login_spring_security.entity.Usuario;
 import com.example.login_spring_security.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,7 +30,7 @@ public class UsuarioService implements UserDetailsService {
         return User.builder()
                 .username(usuario.getUsername())
                 .password(usuario.getPassword())
-                .authorities(Collections.emptyList())
+                .authorities(new SimpleGrantedAuthority(usuario.getRole()))
                 .build();
     }
 }

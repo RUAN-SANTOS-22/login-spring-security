@@ -17,16 +17,18 @@ public class JwtService {
 
     public static final String SECRET = "MinhaChaveSuperSECRETA#123456789#876543210#";
 
-    public String generateToken(String username){
-        return Jwts.builder()
-            .subject(username)
-            .issuedAt(new Date())
-            .expiration(new Date(System.currentTimeMillis() + 1000*60*30))
-            .claims(new HashMap<>())
-            .signWith(getSignedKey())
-            .compact();
-
+    public String generateToken(String username, String role){
+        HashMap<String, Object> claims = new HashMap<>();
+        claims.put("Role", role);
+            return Jwts.builder()
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000*60*30))
+                .claims(claims)
+                .signWith(getSignedKey())
+                .compact();
     }
+
     private SecretKey getSignedKey(){
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
